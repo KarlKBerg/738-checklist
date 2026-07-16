@@ -1,1 +1,99 @@
 @import url("css/variables.css");
+body {
+  background-color: var(--bcg-color);
+  color: var(--text-color);
+  font-family: var(--main-font);
+  display: flex;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+aside .header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+#plane-type {
+  color: var(--text-highlight);
+  letter-spacing: 0.1rem;
+}
+#checklist-type {
+  font-size: 1.8rem;
+}
+#flight-time {
+  color: var(--text-color-muted);
+  font-weight: 500;
+}
+.header {
+  padding: 2.4rem 1.8rem;
+  border-bottom: 1px solid var(--border-color);
+  height: 10rem;
+}
+aside {
+  width: 25rem;
+  border-right: 1px solid var(--border-color);
+}
+.info-top {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  font-size: 1.2rem;
+  color: var(--text-highlight);
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+}
+.info-top i {
+  font-size: 0.3rem;
+}
+main .header {
+  width: 100%;
+}
+#phase-name-big {
+  font-size: 3.2rem;
+  font-weight: 700;
+}
+.header-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#completed-checks {
+  font-size: 1.4rem;
+  color: var(--text-color-muted);
+}
+.menu {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+}
+.menu-item {
+  padding: 1.6rem 1.78rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+button {
+  color: var(--text-color);
+}
+.active {
+  border-left: 2px solid var(--text-highlight);
+  background-color: #252525;
+}
+.menu-item:hover {
+  background-color: #252525;
+  cursor: pointer;
+}
+#menu-item-completion {
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+.inter {
+  font-family: var(--secondary-font);
+}
