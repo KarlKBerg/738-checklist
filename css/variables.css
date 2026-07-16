@@ -1,10 +1,16 @@
 :root {
+  /* ==== FONTS ==== */
+  --main-font: "IBM Plex Mono", monospace;
+  --secondary-font: "Inter", sans-serif;
   /* ==== COLORS ==== */
   --bcg-color: #191919;
+  --bcg-active-color: #3b3b3b;
   /* Text colors */
-  --text-color: #ffffdb;
+  --text-color: #e7ede9;
   --text-color-muted: #7a7a7a;
+  --text-highlight: #ffd166;
   /* Border-colors */
-  --border-color: #837f7f;
-  --border-color-complete: rgb(24, 110, 24);
+  --border-color: #3d3d3d;
+  --border-color-complete: #00f000;
+  --background-color-complete: #004900;
 }
