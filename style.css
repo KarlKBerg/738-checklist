@@ -111,7 +111,7 @@ button {
   background-color: var(--bcg-active-color);
   border-radius: 0.5rem;
   font-size: 1.4rem;
-  border: 1px solid var(--text-color-muted);
+  border: 2px solid var(--text-color-muted);
 }
 .square i {
   color: var(--border-color-complete);
@@ -136,6 +136,9 @@ button {
   font-weight: 600;
 }
 .completed {
+  background-color: #001b00;
+}
+.completed:hover {
   background-color: #001b00;
 }
 .square-completed {
