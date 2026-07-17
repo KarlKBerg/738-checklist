@@ -85,6 +85,7 @@ function completeCheck() {
       );
       correctCheck[0].completed = !correctCheck[0].completed;
       displayChecklist(currentStage);
+      displaySidebarStages();
     });
   });
 }
@@ -100,12 +101,17 @@ function displaySidebarStages() {
 
     const buttonName = document.createElement("span");
     buttonName.classList.add("inter", "stage-name");
-    buttonName.textContent = stage.toUpperCase();
+    buttonName.textContent = stage.toUpperCase().replace("-", " ");
 
     const itemCompletion = document.createElement("span");
     itemCompletion.classList.add("menu-item-completion", "inter");
-    itemCompletion.textContent = "0/11";
-
+    // Find amount of checks with each stagename
+    const checkAmounts = checklist.filter((obj) => obj.stage === stage);
+    const completedAmounts = checklist.filter(
+      (obj) => obj.completed && obj.stage === stage,
+    );
+    itemCompletion.innerText =
+      completedAmounts.length + "/" + checkAmounts.length;
     if (index === 0) {
       buttonDiv.classList.add("active");
     }
@@ -122,7 +128,7 @@ function displaySidebarStages() {
       // Set currentStage to the same value as clicked element
       const selectedStageName =
         event.currentTarget.querySelector(".stage-name").textContent;
-      currentStage = selectedStageName.toLowerCase();
+      currentStage = selectedStageName.toLowerCase().replace(" ", "-");
       displayChecklist(currentStage);
     });
   });
