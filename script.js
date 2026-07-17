@@ -20,13 +20,23 @@ function displayChecklist(stage) {
   const container = document.querySelector(".checklist-container");
   if (!container) return;
   container.innerHTML = "";
+  const nextPreButtonsDiv = document.createElement("div");
+  nextPreButtonsDiv.classList.add("next-pre-btn-div");
 
+  const prevBtn = document.createElement("button");
+  prevBtn.classList.add("prev-btn", "nav-btn");
+  prevBtn.textContent = "PREV";
+
+  const nextBtn = document.createElement("button");
+  nextBtn.classList.add("next-btn", "nav-btn");
+  nextBtn.textContent = "NEXT";
+  container.appendChild(nextPreButtonsDiv);
+  if (currentStage === "preflight") {
+    prevBtn.classList.add("invis");
+  }
+  nextPreButtonsDiv.appendChild(prevBtn);
+  nextPreButtonsDiv.appendChild(nextBtn);
   checklist.forEach((check) => {
-    const nextPreButtonsDiv = document.createElement("div");
-    nextPreButtonsDiv.classList.add("next-pre-btn-div");
-
-    const prevBtn = document.createElement("button");
-    prevBtn.classList.add("prev-brn");
     const checkDiv = document.createElement("div");
     checkDiv.classList.add("check");
 
@@ -73,12 +83,14 @@ function displayChecklist(stage) {
       checkDiv.appendChild(value);
     }
   });
+
   // If all checks are completed
   const currentChecks = checklist.filter((ch) => ch.stage === currentStage);
   if (currentChecks.every((c) => c.completed)) {
     displayNexButton(container);
   }
   completeCheck();
+  nextPrevListener();
 }
 displayChecklist(currentStage);
 function displayNexButton(place) {
@@ -110,7 +122,7 @@ function completeCheck() {
       correctCheck[0].completed = !correctCheck[0].completed;
       displayChecklist(currentStage);
       displaySidebarStages();
-      nextBtnEventListener();
+      nextCompleteBtnEventListener();
     });
   });
 }
@@ -161,7 +173,7 @@ function displaySidebarStages() {
       currentStage = stages[targetIndex];
       displayChecklist(currentStage);
       updateText(targetIndex);
-      nextBtnEventListener();
+      nextCompleteBtnEventListener();
     });
   });
 }
@@ -191,15 +203,29 @@ function resetAll() {
   updateText(0);
 }
 
-function nextBtnEventListener() {
+function nextCompleteBtnEventListener() {
   const nextBtn = document.querySelector(".next-complete-btn");
   if (!nextBtn) return;
   nextBtn.addEventListener("click", nextStage);
 }
+function nextPrevListener() {
+  const nextBtn = document.querySelector(".next-btn");
+  const prevBtn = document.querySelector(".prev-btn");
 
+  nextBtn.addEventListener("click", nextStage);
+  prevBtn.addEventListener("click", prevStage);
+}
 function nextStage() {
   const stageIndex = stages.indexOf(currentStage);
   currentStage = stages[stageIndex + 1];
+  displayChecklist(currentStage);
+  displaySidebarStages();
+  updateText(0);
+}
+
+function prevStage() {
+  const stageIndex = stages.indexOf(currentStage);
+  currentStage = stages[stageIndex - 1];
   displayChecklist(currentStage);
   displaySidebarStages();
   updateText(0);
