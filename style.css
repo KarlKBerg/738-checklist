@@ -70,7 +70,7 @@ main .header {
   gap: 1.6rem;
   margin-top: 4rem;
 }
-.next--complete-btn {
+.next-complete-btn {
   align-self: center;
   padding: 0.8rem 4rem;
   background-color: var(--bcg-active-color);
