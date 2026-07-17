@@ -197,6 +197,7 @@ function resetList() {
 }
 resetListButton.addEventListener("click", resetList);
 resetAllButton.addEventListener("click", resetAll);
+
 function resetAll() {
   checklist.forEach((check) => {
     check.completed = false;
@@ -204,7 +205,7 @@ function resetAll() {
   currentStage = stages[0];
   displayChecklist(currentStage);
   displaySidebarStages();
-  updateText(0);
+  updateText();
 }
 
 function nextCompleteBtnEventListener() {
