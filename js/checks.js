@@ -408,13 +408,6 @@ export let checklist = [
   },
   {
     completed: false,
-    item: "ALTIMITERS",
-    value: "____ SET",
-    slc: false,
-    stage: "approach",
-  },
-  {
-    completed: false,
     item: "SEATS FOR LANDING PA",
     value: "GIVEN",
     slc: true,
@@ -513,6 +506,20 @@ export let checklist = [
   },
   {
     completed: false,
+    item: "PASSENGER SIGNS",
+    value: "OFF",
+    slc: true,
+    stage: "shutdown",
+  },
+  {
+    completed: false,
+    item: "DEBOARDING",
+    value: "REQUESTED",
+    slc: true,
+    stage: "shutdown",
+  },
+  {
+    completed: false,
     item: "WEATHER RADAR",
     value: "OFF",
     slc: false,
@@ -541,15 +548,8 @@ export let checklist = [
   },
   {
     completed: false,
-    item: "PASSENGER SIGNS",
-    value: "OFF",
-    slc: true,
-    stage: "shutdown",
-  },
-  {
-    completed: false,
-    item: "DEBOARDING",
-    value: "REQUESTED",
+    item: "CREW START DEBOARDING PA",
+    value: "GIVEN",
     slc: true,
     stage: "shutdown",
   },
