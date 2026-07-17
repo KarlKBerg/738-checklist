@@ -1,4 +1,5 @@
-let checks = [
+"use strict";
+export let checklist = [
   {
     completed: false,
     item: "OXYGEN",
