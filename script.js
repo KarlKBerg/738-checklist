@@ -1,5 +1,6 @@
 "use strict";
 import { checklist } from "./js/checks.js";
+
 const stages = [
   "preflight",
   "before-start",
@@ -16,46 +17,113 @@ const stages = [
 ];
 
 let currentStage = stages[0];
-function displayChecklist(stage) {
+
+// ==== PERSISTENCE (optional, delete this block to remove) ====
+const STORAGE_KEY = "b738-checklist-state";
+
+function saveState() {
+  const state = {
+    currentStage,
+    completed: checklist.map((c) => c.completed),
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    if (stages.includes(state.currentStage)) currentStage = state.currentStage;
+    if (Array.isArray(state.completed)) {
+      // Only restore if the checklist length matches, so editing
+      // checks.js doesn't misalign saved flags with the wrong items.
+      if (state.completed.length === checklist.length) {
+        checklist.forEach(
+          (c, i) => (c.completed = Boolean(state.completed[i])),
+        );
+      }
+    }
+  } catch {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+}
+
+// ==== HELPERS ====
+
+function stageLabel(stage) {
+  return stage.toUpperCase().replaceAll("-", " ");
+}
+
+function stageTitle(stage) {
+  const withSpaces = stage.replaceAll("-", " ");
+  return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
+}
+
+function checksForStage(stage) {
+  return checklist.filter((c) => c.stage === stage);
+}
+
+function stageIsComplete(stage) {
+  const checks = checksForStage(stage);
+  return checks.length > 0 && checks.every((c) => c.completed);
+}
+
+// Re-render everything that depends on state. One entry point means
+// no caller can forget to update part of the UI.
+function render() {
+  displayChecklist();
+  displaySidebarStages();
+  updateText();
+}
+
+// ==== CHECKLIST ====
+
+function displayChecklist() {
   const container = document.querySelector(".checklist-container");
   if (!container) return;
   container.innerHTML = "";
-  const nextPreButtonsDiv = document.createElement("div");
-  nextPreButtonsDiv.classList.add("next-pre-btn-div");
+
+  // PREV / NEXT navigation
+  const navDiv = document.createElement("div");
+  navDiv.classList.add("next-pre-btn-div");
 
   const prevBtn = document.createElement("button");
   prevBtn.classList.add("prev-btn", "nav-btn");
   prevBtn.textContent = "PREV";
+  if (currentStage === stages[0]) prevBtn.classList.add("invis");
 
   const nextBtn = document.createElement("button");
   nextBtn.classList.add("next-btn", "nav-btn");
   nextBtn.textContent = "NEXT";
-  container.appendChild(nextPreButtonsDiv);
-  if (currentStage === "preflight") {
-    prevBtn.classList.add("invis");
-  }
-  nextPreButtonsDiv.appendChild(prevBtn);
-  if (currentStage === stages.at(-1)) {
-    nextBtn.classList.add("invis");
-  }
-  nextPreButtonsDiv.appendChild(nextBtn);
-  checklist.forEach((check) => {
+  if (currentStage === stages.at(-1)) nextBtn.classList.add("invis");
+
+  navDiv.append(prevBtn, nextBtn);
+  container.appendChild(navDiv);
+
+  // Checks for the current stage. dataset.index stores the item's
+  // position in the full checklist array, so the click handler can
+  // find it without matching on displayed text.
+  checklist.forEach((check, index) => {
+    if (check.stage !== currentStage) return;
+
     const checkDiv = document.createElement("div");
     checkDiv.classList.add("check");
+    checkDiv.dataset.index = index;
+    // Keyboard + screen reader support
+    checkDiv.setAttribute("role", "checkbox");
+    checkDiv.setAttribute("aria-checked", String(check.completed));
+    checkDiv.tabIndex = 0;
 
     const squareDiv = document.createElement("div");
     squareDiv.classList.add("square");
 
     const checkIcon = document.createElement("i");
-    checkIcon.classList.add("fa-solid", "fa-check", "invis");
+    checkIcon.classList.add("fa-solid", "fa-check");
 
     const item = document.createElement("span");
     item.classList.add("item");
     item.textContent = check.item;
-
-    const slc = document.createElement("span");
-    slc.classList.add("slc");
-    slc.textContent = "SLC";
 
     const divider = document.createElement("hr");
     divider.classList.add("divider");
@@ -63,191 +131,172 @@ function displayChecklist(stage) {
     const value = document.createElement("span");
     value.classList.add("value");
     value.textContent = check.value;
+
     if (check.completed) {
       checkDiv.classList.add("completed");
       squareDiv.classList.add("square-completed");
-      checkIcon.classList.remove("invis");
     } else {
-      checkDiv.classList.remove("completed");
-      squareDiv.classList.remove("square-completed");
       checkIcon.classList.add("invis");
     }
 
-    // Only display checks for the current stage
-    if (check.stage === currentStage) {
-      container.appendChild(checkDiv);
-      checkDiv.appendChild(squareDiv);
-      squareDiv.appendChild(checkIcon);
-      checkDiv.appendChild(item);
-      if (check.slc) {
-        checkDiv.appendChild(slc);
-      }
-      checkDiv.appendChild(divider);
-      checkDiv.appendChild(value);
+    squareDiv.appendChild(checkIcon);
+    checkDiv.append(squareDiv, item);
+
+    if (check.slc) {
+      const slc = document.createElement("span");
+      slc.classList.add("slc");
+      slc.textContent = "SLC";
+      checkDiv.appendChild(slc);
     }
+
+    checkDiv.append(divider, value);
+    container.appendChild(checkDiv);
   });
 
-  // If all checks are completed
-  const currentChecks = checklist.filter((ch) => ch.stage === currentStage);
-  if (currentChecks.every((c) => c.completed)) {
-    displayNexButton(container);
+  if (stageIsComplete(currentStage)) {
+    displayCompleteBanner(container);
   }
-  completeCheck();
-  nextPrevListener();
-  nextCompleteBtnEventListener();
 }
-displayChecklist(currentStage);
-function displayNexButton(place) {
+
+function displayCompleteBanner(container) {
   const completeDiv = document.createElement("div");
   completeDiv.classList.add("complete-div");
+
   const message = document.createElement("span");
-  message.textContent = "CHECKLIST COMPLETE";
   message.classList.add("checklist-complete");
+  message.textContent = "CHECKLIST COMPLETE";
 
-  const button = document.createElement("button");
-  button.classList.add("next-complete-btn");
-  button.textContent = "NEXT";
-  place.appendChild(completeDiv);
   completeDiv.appendChild(message);
-  completeDiv.appendChild(button);
-}
-// Eventlistener for completing checks
-function completeCheck() {
-  const checklistContainer = document.querySelector(".checklist-container");
-  const checks = checklistContainer.querySelectorAll(".check");
-  if (!checklistContainer || !checks) return;
-  checks.forEach((c) => {
-    c.addEventListener("click", (event) => {
-      const clickedName = event.currentTarget.querySelector(".item").innerHTML;
 
-      const correctCheck = checklist.filter(
-        (check) => check.item === clickedName && check.stage === currentStage,
-      );
-      correctCheck[0].completed = !correctCheck[0].completed;
-      displayChecklist(currentStage);
-      displaySidebarStages();
-    });
-  });
+  // No NEXT on the final stage — nowhere to go
+  if (currentStage !== stages.at(-1)) {
+    const button = document.createElement("button");
+    button.classList.add("next-complete-btn");
+    button.textContent = "NEXT";
+    completeDiv.appendChild(button);
+  }
+
+  container.appendChild(completeDiv);
 }
 
-// Display sidebar buttons
+// ==== SIDEBAR ====
+
 function displaySidebarStages() {
   const container = document.querySelector(".menu");
   if (!container) return;
   container.innerHTML = "";
+
   stages.forEach((stage) => {
     const buttonDiv = document.createElement("div");
     buttonDiv.classList.add("menu-item");
+    // Store the stage id directly — no lowercasing/re-hyphenating later
+    buttonDiv.dataset.stage = stage;
+    if (stage === currentStage) buttonDiv.classList.add("active");
 
     const buttonName = document.createElement("span");
     buttonName.classList.add("inter", "stage-name");
-    buttonName.textContent = stage.toUpperCase().replace("-", " ");
+    buttonName.textContent = stageLabel(stage);
 
     const itemCompletion = document.createElement("span");
     itemCompletion.classList.add("menu-item-completion", "inter");
+    const checks = checksForStage(stage);
+    const done = checks.filter((c) => c.completed).length;
+    itemCompletion.textContent = `${done}/${checks.length}`;
 
-    const checkAmounts = checklist.filter((obj) => obj.stage === stage);
-    const completedAmounts = checklist.filter(
-      (obj) => obj.completed && obj.stage === stage,
-    );
-    itemCompletion.innerText =
-      completedAmounts.length + "/" + checkAmounts.length;
-    if (stage === currentStage) {
-      buttonDiv.classList.add("active");
-    }
-
+    buttonDiv.append(buttonName, itemCompletion);
     container.appendChild(buttonDiv);
-    buttonDiv.appendChild(buttonName);
-    buttonDiv.appendChild(itemCompletion);
-  });
-  const menuItem = container.querySelectorAll(".menu-item");
-  menuItem.forEach((i) => {
-    i.addEventListener("click", (event) => {
-      menuItem.forEach((el) => el.classList.remove("active"));
-      event.currentTarget.classList.add("active");
-      // Set currentStage to the same value as clicked element
-      const selectedStageName =
-        event.currentTarget.querySelector(".stage-name").textContent;
-      const target = stages.find(
-        (stage) =>
-          stage === selectedStageName.toLowerCase().replaceAll(" ", "-"),
-      );
-
-      const targetIndex = stages.indexOf(target);
-      currentStage = stages[targetIndex];
-      displayChecklist(currentStage);
-      updateText();
-    });
   });
 }
-displaySidebarStages();
 
-const resetListButton = document.querySelector(".reset-list");
-const resetAllButton = document.querySelector(".reset-all");
-
-function resetList() {
-  checklist.forEach((check) => {
-    if (check.stage === currentStage) {
-      check.completed = false;
-    }
-  });
-  displayChecklist(currentStage);
-  displaySidebarStages();
-}
-resetListButton.addEventListener("click", resetList);
-resetAllButton.addEventListener("click", resetAll);
-
-function resetAll() {
-  checklist.forEach((check) => {
-    check.completed = false;
-  });
-  currentStage = stages[0];
-  displayChecklist(currentStage);
-  displaySidebarStages();
-  updateText();
-}
-
-function nextCompleteBtnEventListener() {
-  const nextBtn = document.querySelector(".next-complete-btn");
-  if (!nextBtn) return;
-  nextBtn.addEventListener("click", nextStage);
-}
-function nextPrevListener() {
-  const nextBtn = document.querySelector(".next-btn");
-  const prevBtn = document.querySelector(".prev-btn");
-
-  nextBtn.addEventListener("click", nextStage);
-  prevBtn.addEventListener("click", prevStage);
-}
-function nextStage() {
-  const stageIndex = stages.indexOf(currentStage);
-  if (stageIndex >= stages.length - 1) return;
-  currentStage = stages[stageIndex + 1];
-  updateText();
-  displayChecklist(currentStage);
-  displaySidebarStages();
-}
-
-function prevStage() {
-  const stageIndex = stages.indexOf(currentStage);
-  currentStage = stages[stageIndex - 1];
-  updateText();
-  displayChecklist(currentStage);
-  displaySidebarStages();
-}
+// ==== HEADER ====
 
 function updateText() {
   const phaseNameBig = document.getElementById("phase-name-big");
   const phaseName = document.getElementById("phase-info-name");
   const phaseNumber = document.getElementById("phase-number-info");
 
-  phaseName.textContent = currentStage.toUpperCase();
-  phaseNameBig.textContent =
-    currentStage.toUpperCase().slice(0, 1) + currentStage.slice(1);
-  let letIndex = stages.indexOf(currentStage);
-  let first = "0";
-  if (letIndex >= 9) {
-    first = "";
-  }
-  phaseNumber.textContent = "PHASE " + first + (letIndex + 1);
+  phaseName.textContent = stageLabel(currentStage);
+  phaseNameBig.textContent = stageTitle(currentStage);
+
+  const phase = String(stages.indexOf(currentStage) + 1).padStart(2, "0");
+  phaseNumber.textContent = `PHASE ${phase}`;
 }
+
+// ==== STATE CHANGES ====
+
+function goToStage(stage) {
+  if (!stages.includes(stage)) return;
+  currentStage = stage;
+  saveState();
+  render();
+}
+
+function nextStage() {
+  const i = stages.indexOf(currentStage);
+  if (i < stages.length - 1) goToStage(stages[i + 1]);
+}
+
+function prevStage() {
+  const i = stages.indexOf(currentStage);
+  if (i > 0) goToStage(stages[i - 1]);
+}
+
+function toggleCheck(index) {
+  const check = checklist[index];
+  if (!check) return;
+  check.completed = !check.completed;
+  saveState();
+  render();
+}
+
+function resetList() {
+  checksForStage(currentStage).forEach((c) => (c.completed = false));
+  saveState();
+  render();
+}
+
+function resetAll() {
+  checklist.forEach((c) => (c.completed = false));
+  currentStage = stages[0];
+  saveState();
+  render();
+}
+
+// ==== EVENT DELEGATION ====
+// One listener per container, attached once. Re-rendering never
+// requires re-wiring anything.
+
+document
+  .querySelector(".checklist-container")
+  .addEventListener("click", (event) => {
+    const check = event.target.closest(".check");
+    if (check) {
+      toggleCheck(Number(check.dataset.index));
+      return;
+    }
+    if (event.target.closest(".next-btn, .next-complete-btn")) nextStage();
+    else if (event.target.closest(".prev-btn")) prevStage();
+  });
+
+// Space/Enter toggles the focused check
+document
+  .querySelector(".checklist-container")
+  .addEventListener("keydown", (event) => {
+    if (event.key !== " " && event.key !== "Enter") return;
+    const check = event.target.closest(".check");
+    if (!check) return;
+    event.preventDefault();
+    toggleCheck(Number(check.dataset.index));
+  });
+
+document.querySelector(".menu").addEventListener("click", (event) => {
+  const item = event.target.closest(".menu-item");
+  if (item) goToStage(item.dataset.stage);
+});
+
+document.querySelector(".reset-list").addEventListener("click", resetList);
+document.querySelector(".reset-all").addEventListener("click", resetAll);
+
+// ==== INIT ====
+loadState();
+render();
