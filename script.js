@@ -105,7 +105,7 @@ function displaySidebarStages() {
 
     const itemCompletion = document.createElement("span");
     itemCompletion.classList.add("menu-item-completion", "inter");
-    // Find amount of checks with each stagename
+
     const checkAmounts = checklist.filter((obj) => obj.stage === stage);
     const completedAmounts = checklist.filter(
       (obj) => obj.completed && obj.stage === stage,
@@ -134,3 +134,31 @@ function displaySidebarStages() {
   });
 }
 displaySidebarStages();
+
+const resetListButton = document.querySelector(".reset-list");
+const resetAllButton = document.querySelector(".reset-all");
+
+function resetList() {
+  checklist.forEach((check) => {
+    if (check.stage === currentStage) {
+      check.completed = false;
+    }
+  });
+  displayChecklist(currentStage);
+  displaySidebarStages();
+}
+resetListButton.addEventListener("click", resetList);
+resetAllButton.addEventListener("click", resetAll);
+function resetAll() {
+  checklist.forEach((check) => {
+    check.completed = false;
+  });
+  currentStage = stages[0];
+  displayChecklist(currentStage);
+  displaySidebarStages();
+}
+
+function updateText() {
+  const phaseName = document.getElementById("phase-info-name");
+  const phaseNumber = document.getElementById("phase-number-info");
+}
