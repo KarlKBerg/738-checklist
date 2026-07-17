@@ -54,6 +54,7 @@ function displayChecklist(stage) {
       squareDiv.classList.remove("square-completed");
       checkIcon.classList.add("invis");
     }
+
     // Only display checks for the current stage
     if (check.stage === currentStage) {
       container.appendChild(checkDiv);
@@ -67,10 +68,27 @@ function displayChecklist(stage) {
       checkDiv.appendChild(value);
     }
   });
+  // If all checks are completed
+  if (!checklist.every((item) => item.completed)) {
+    displayNexButton(container);
+  }
   completeCheck();
 }
 displayChecklist(currentStage);
+function displayNexButton(place) {
+  const completeDiv = document.createElement("div");
+  completeDiv.classList.add("complete-div");
+  const message = document.createElement("span");
+  message.textContent = "CHECKLIST COMPLETE";
+  message.classList.add("checklist-complete");
 
+  const button = document.createElement("button");
+  button.classList.add("next-btn");
+  button.textContent = "NEXT";
+  place.appendChild(completeDiv);
+  completeDiv.appendChild(message);
+  completeDiv.appendChild(button);
+}
 // Eventlistener for completing checks
 function completeCheck() {
   const checklistContainer = document.querySelector(".checklist-container");
@@ -86,6 +104,7 @@ function completeCheck() {
       correctCheck[0].completed = !correctCheck[0].completed;
       displayChecklist(currentStage);
       displaySidebarStages();
+      nextBtnEventListener();
     });
   });
 }
@@ -136,6 +155,7 @@ function displaySidebarStages() {
       currentStage = stages[targetIndex];
       displayChecklist(currentStage);
       updateText(targetIndex);
+      nextBtnEventListener();
     });
   });
 }
@@ -162,7 +182,21 @@ function resetAll() {
   currentStage = stages[0];
   displayChecklist(currentStage);
   displaySidebarStages();
-  updateText();
+  updateText(0);
+}
+
+function nextBtnEventListener() {
+  const nextBtn = document.querySelector(".next-btn");
+  if (!nextBtn) return;
+  nextBtn.addEventListener("click", nextStage);
+}
+
+function nextStage() {
+  const stageIndex = stages.indexOf(currentStage);
+  currentStage = stages[stageIndex + 1];
+  displayChecklist(currentStage);
+  displaySidebarStages();
+  updateText(0);
 }
 
 function updateText(index) {
