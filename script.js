@@ -122,7 +122,7 @@ function displaySidebarStages() {
       // Set currentStage to the same value as clicked element
       const selectedStageName =
         event.currentTarget.querySelector(".stage-name").textContent;
-      currentStage = selectedStageName;
+      currentStage = selectedStageName.toLowerCase();
       displayChecklist(currentStage);
     });
   });
