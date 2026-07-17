@@ -22,6 +22,11 @@ function displayChecklist(stage) {
   container.innerHTML = "";
 
   checklist.forEach((check) => {
+    const nextPreButtonsDiv = document.createElement("div");
+    nextPreButtonsDiv.classList.add("next-pre-btn-div");
+
+    const prevBtn = document.createElement("button");
+    prevBtn.classList.add("prev-brn");
     const checkDiv = document.createElement("div");
     checkDiv.classList.add("check");
 
@@ -84,7 +89,7 @@ function displayNexButton(place) {
   message.classList.add("checklist-complete");
 
   const button = document.createElement("button");
-  button.classList.add("next-btn");
+  button.classList.add("next-complete-btn");
   button.textContent = "NEXT";
   place.appendChild(completeDiv);
   completeDiv.appendChild(message);
@@ -187,7 +192,7 @@ function resetAll() {
 }
 
 function nextBtnEventListener() {
-  const nextBtn = document.querySelector(".next-btn");
+  const nextBtn = document.querySelector(".next-complete-btn");
   if (!nextBtn) return;
   nextBtn.addEventListener("click", nextStage);
 }
