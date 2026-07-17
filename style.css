@@ -27,7 +27,7 @@ aside .header {
   font-weight: 500;
 }
 .header {
-  padding: 2.4rem 1.8rem;
+  margin: 2.4rem 1.8rem;
   border-bottom: 1px solid var(--border-color);
   height: 10rem;
 }
@@ -144,6 +144,7 @@ main .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.4rem;
 }
 button {
   color: var(--text-color);
