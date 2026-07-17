@@ -156,6 +156,10 @@ function displayChecklist() {
   if (stageIsComplete(currentStage)) {
     displayCompleteBanner(container);
   }
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
 }
 
 function displayCompleteBanner(container) {
