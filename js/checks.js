@@ -9,7 +9,7 @@ export let checklist = [
   },
   {
     completed: false,
-    item: "INST XFER & DISPLAY SWITCHES",
+    item: "INST XFER AND DISPLAY SWITCHES",
     value: "NORMAL, AUTO",
     slc: false,
     stage: "preflight",
@@ -59,7 +59,7 @@ export let checklist = [
   {
     completed: false,
     item: "FLIGHT DECK DOOR",
-    value: "CLOSED & LOCKED",
+    value: "CLOSED AND LOCKED",
     slc: false,
     stage: "before-start",
   },
@@ -108,13 +108,13 @@ export let checklist = [
   {
     completed: false,
     item: "RUDDER AND AILERON TRIM",
-    value: "FREE & ZERO",
+    value: "FREE AND ZERO",
     slc: false,
     stage: "before-start",
   },
   {
     completed: false,
-    item: "TAXI & TAKEOFF BRIEFING",
+    item: "TAXI AND TAKEOFF BRIEFING",
     value: "COMPLETED",
     slc: false,
     stage: "before-start",
