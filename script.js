@@ -35,6 +35,9 @@ function displayChecklist(stage) {
     prevBtn.classList.add("invis");
   }
   nextPreButtonsDiv.appendChild(prevBtn);
+  if (currentStage === stages.at(-1)) {
+    nextBtn.classList.add("invis");
+  }
   nextPreButtonsDiv.appendChild(nextBtn);
   checklist.forEach((check) => {
     const checkDiv = document.createElement("div");
