@@ -48,8 +48,26 @@ function displayChecklist(stage) {
     checkDiv.appendChild(divider);
     checkDiv.appendChild(value);
   });
+  completeCheck();
 }
 displayChecklist(currentStage);
+
+// Eventlistener for completing checks
+function completeCheck() {
+  const checklistContainer = document.querySelector(".checklist-container");
+  const checks = checklistContainer.querySelectorAll(".check");
+  if (!checklistContainer || !checks) return;
+  checks.forEach((check) => {
+    check.addEventListener("click", (event) => {
+      event.currentTarget.classList.toggle("completed");
+      event.currentTarget
+        .querySelector(".square")
+        .classList.toggle("square-completed");
+      event.currentTarget.querySelector(".square i").classList.toggle("invis");
+    });
+  });
+}
+
 /*
 const stateContainer = document.querySelector(".checklist-state");
 const state = stateContainer.querySelectorAll("span");
