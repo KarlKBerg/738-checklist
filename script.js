@@ -94,6 +94,7 @@ function displayChecklist(stage) {
   }
   completeCheck();
   nextPrevListener();
+  nextCompleteBtnEventListener();
 }
 displayChecklist(currentStage);
 function displayNexButton(place) {
@@ -125,7 +126,6 @@ function completeCheck() {
       correctCheck[0].completed = !correctCheck[0].completed;
       displayChecklist(currentStage);
       displaySidebarStages();
-      nextCompleteBtnEventListener();
     });
   });
 }
@@ -177,7 +177,6 @@ function displaySidebarStages() {
       currentStage = stages[targetIndex];
       displayChecklist(currentStage);
       updateText();
-      nextCompleteBtnEventListener();
     });
   });
 }
@@ -222,6 +221,7 @@ function nextPrevListener() {
 }
 function nextStage() {
   const stageIndex = stages.indexOf(currentStage);
+  if (stageIndex >= stages.length - 1) return;
   currentStage = stages[stageIndex + 1];
   updateText();
   displayChecklist(currentStage);
