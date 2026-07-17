@@ -88,7 +88,7 @@ button {
   background-color: #252525;
   cursor: pointer;
 }
-#menu-item-completion {
+.menu-item-completion {
   font-size: 1.2rem;
   font-weight: 400;
 }
