@@ -100,7 +100,7 @@ function displaySidebarStages() {
 
     const buttonName = document.createElement("span");
     buttonName.classList.add("inter", "stage-name");
-    buttonName.textContent = stage;
+    buttonName.textContent = stage.toUpperCase();
 
     const itemCompletion = document.createElement("span");
     itemCompletion.classList.add("menu-item-completion", "inter");
