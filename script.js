@@ -169,7 +169,8 @@ function displaySidebarStages() {
       const selectedStageName =
         event.currentTarget.querySelector(".stage-name").textContent;
       const target = stages.find(
-        (stage) => stage === selectedStageName.toLowerCase().replace(" ", "-"),
+        (stage) =>
+          stage === selectedStageName.toLowerCase().replaceAll(" ", "-"),
       );
 
       const targetIndex = stages.indexOf(target);
