@@ -95,7 +95,7 @@ function displaySidebarStages() {
   const container = document.querySelector(".menu");
   if (!container) return;
   container.innerHTML = "";
-  stages.forEach((stage, index) => {
+  stages.forEach((stage) => {
     const buttonDiv = document.createElement("div");
     buttonDiv.classList.add("menu-item");
 
@@ -112,7 +112,7 @@ function displaySidebarStages() {
     );
     itemCompletion.innerText =
       completedAmounts.length + "/" + checkAmounts.length;
-    if (index === 0) {
+    if (stage === currentStage) {
       buttonDiv.classList.add("active");
     }
 
