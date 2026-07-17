@@ -99,7 +99,7 @@ function displaySidebarStages() {
     buttonDiv.classList.add("menu-item");
 
     const buttonName = document.createElement("span");
-    buttonName.classList.add("inter");
+    buttonName.classList.add("inter", "stage-name");
     buttonName.textContent = stage;
 
     const itemCompletion = document.createElement("span");
@@ -114,24 +114,17 @@ function displaySidebarStages() {
     buttonDiv.appendChild(buttonName);
     buttonDiv.appendChild(itemCompletion);
   });
-}
-displaySidebarStages();
-/*
-const stateContainer = document.querySelector(".checklist-state");
-const state = stateContainer.querySelectorAll("span");
-
-state.forEach((s) => {
-  s.addEventListener("click", (event) => {
-    state.forEach((el) => el.classList.remove("active"));
-    event.target.classList.add("active");
-    // show/hide checklists
-    const checklistContainer = document.querySelector(".checklists-container");
-    const checklist = checklistContainer.querySelectorAll(".each");
-    let clickedChecklist = event.currentTarget.dataset.checklist;
-    checklist.forEach((el) => {
-      el.classList.toggle("hidden", el.dataset.checklist !== clickedChecklist);
+  const menuItem = container.querySelectorAll(".menu-item");
+  menuItem.forEach((i) => {
+    i.addEventListener("click", (event) => {
+      menuItem.forEach((el) => el.classList.remove("active"));
+      event.currentTarget.classList.add("active");
+      // Set currentStage to the same value as clicked element
+      const selectedStageName =
+        event.currentTarget.querySelector(".stage-name").textContent;
+      currentStage = selectedStageName;
+      displayChecklist(currentStage);
     });
   });
-});
-
-*/
+}
+displaySidebarStages();
