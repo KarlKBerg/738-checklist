@@ -1,5 +1,19 @@
 "use strict";
 import { checklist } from "./js/checks.js";
+const stages = [
+  "preflight",
+  "before-start",
+  "before-taxi",
+  "before-takeoff",
+  "after-takeoff",
+  "cruise",
+  "descent",
+  "approach",
+  "landing",
+  "after-landing",
+  "shutdown",
+  "securing-aircraft",
+];
 
 let currentStage = "preflight";
 function displayChecklist(stage) {
@@ -75,7 +89,33 @@ function completeCheck() {
   });
 }
 
-// Update progress notation
+// Display sidebar buttons
+function displaySidebarStages() {
+  const container = document.querySelector(".menu");
+  if (!container) return;
+  container.innerHTML = "";
+  stages.forEach((stage, index) => {
+    const buttonDiv = document.createElement("div");
+    buttonDiv.classList.add("menu-item");
+
+    const buttonName = document.createElement("span");
+    buttonName.classList.add("inter");
+    buttonName.textContent = stage;
+
+    const itemCompletion = document.createElement("span");
+    itemCompletion.classList.add("menu-item-completion", "inter");
+    itemCompletion.textContent = "0/11";
+
+    if (index === 0) {
+      buttonDiv.classList.add("active");
+    }
+
+    container.appendChild(buttonDiv);
+    buttonDiv.appendChild(buttonName);
+    buttonDiv.appendChild(itemCompletion);
+  });
+}
+displaySidebarStages();
 /*
 const stateContainer = document.querySelector(".checklist-state");
 const state = stateContainer.querySelectorAll("span");
