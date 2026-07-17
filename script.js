@@ -34,9 +34,11 @@ function displayChecklist(stage) {
     if (check.completed) {
       checkDiv.classList.add("completed");
       squareDiv.classList.add("square-completed");
+      checkIcon.classList.remove("invis");
     } else {
       checkDiv.classList.remove("completed");
       squareDiv.classList.remove("square-completed");
+      checkIcon.classList.add("invis");
     }
     container.appendChild(checkDiv);
     checkDiv.appendChild(squareDiv);
@@ -57,16 +59,20 @@ function completeCheck() {
   const checklistContainer = document.querySelector(".checklist-container");
   const checks = checklistContainer.querySelectorAll(".check");
   if (!checklistContainer || !checks) return;
-  checks.forEach((check) => {
-    check.addEventListener("click", (event) => {
-      event.currentTarget.classList.toggle("completed");
-      event.currentTarget
-        .querySelector(".square")
-        .classList.toggle("square-completed");
-      event.currentTarget.querySelector(".square i").classList.toggle("invis");
+  checks.forEach((c) => {
+    c.addEventListener("click", (event) => {
+      const clickedName = event.currentTarget.querySelector(".item").innerHTML;
+
+      const correctCheck = checklist.filter(
+        (check) => check.item === clickedName,
+      );
+      correctCheck[0].completed = !correctCheck[0].completed;
+      displayChecklist(currentStage);
     });
   });
 }
+
+// Update progress notation
 
 /*
 const stateContainer = document.querySelector(".checklist-state");
