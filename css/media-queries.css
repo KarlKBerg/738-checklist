@@ -23,3 +23,24 @@
     font-size: 0.8rem;
   }
 }
+
+@media screen and (max-width: 680px) {
+  .check {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 610px) {
+  .reset-buttons {
+    flex-direction: column;
+    margin-top: 1.2rem;
+    font-size: 1.4rem;
+  }
+  .header-bottom {
+    flex-direction: column;
+  }
+  .next-pre-btn-div {
+    flex-direction: column;
+  }
+}
