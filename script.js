@@ -69,7 +69,8 @@ function displayChecklist(stage) {
     }
   });
   // If all checks are completed
-  if (!checklist.every((item) => item.completed)) {
+  const currentChecks = checklist.filter((ch) => ch.stage === currentStage);
+  if (currentChecks.every((c) => c.completed)) {
     displayNexButton(container);
   }
   completeCheck();
