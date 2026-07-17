@@ -175,7 +175,7 @@ function displaySidebarStages() {
       const targetIndex = stages.indexOf(target);
       currentStage = stages[targetIndex];
       displayChecklist(currentStage);
-      updateText(targetIndex);
+      updateText();
       nextCompleteBtnEventListener();
     });
   });
@@ -221,20 +221,20 @@ function nextPrevListener() {
 function nextStage() {
   const stageIndex = stages.indexOf(currentStage);
   currentStage = stages[stageIndex + 1];
+  updateText();
   displayChecklist(currentStage);
   displaySidebarStages();
-  updateText(0);
 }
 
 function prevStage() {
   const stageIndex = stages.indexOf(currentStage);
   currentStage = stages[stageIndex - 1];
+  updateText();
   displayChecklist(currentStage);
   displaySidebarStages();
-  updateText(0);
 }
 
-function updateText(index) {
+function updateText() {
   const phaseNameBig = document.getElementById("phase-name-big");
   const phaseName = document.getElementById("phase-info-name");
   const phaseNumber = document.getElementById("phase-number-info");
@@ -242,10 +242,10 @@ function updateText(index) {
   phaseName.textContent = currentStage.toUpperCase();
   phaseNameBig.textContent =
     currentStage.toUpperCase().slice(0, 1) + currentStage.slice(1);
-
+  let letIndex = stages.indexOf(currentStage);
   let first = "0";
-  if (index >= 9) {
+  if (letIndex >= 9) {
     first = "";
   }
-  phaseNumber.textContent = "PHASE " + first + (index + 1);
+  phaseNumber.textContent = "PHASE " + first + (letIndex + 1);
 }
