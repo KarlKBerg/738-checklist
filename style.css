@@ -79,9 +79,26 @@ main .header {
   border: 2px solid var(--border-color);
   border-radius: 0.8rem;
 }
-.next-btn:hover {
+.next-complete-btn:hover {
   background-color: var(--background-color-complete);
   border: 2px solid var(--border-color-complete);
+  cursor: pointer;
+}
+.next-pre-btn-div {
+  display: flex;
+  justify-content: space-between;
+  padding: 2.4rem 1.8rem;
+}
+.nav-btn {
+  font-size: 1.4rem;
+  padding: 0.4rem 1.8rem;
+  border: 2px solid var(--border-color);
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+.nav-btn:hover {
+  background-color: var(--bcg-active-color);
+  border: 2px solid var(--text-color);
   cursor: pointer;
 }
 .checklist-complete {
@@ -94,21 +111,21 @@ main .header {
 }
 .reset {
   font-size: 1.4rem;
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--border-color);
   padding: 0.8rem 1.6rem;
   border-radius: 0.8rem;
 }
 .reset-list:hover {
   background-color: var(--bcg-active-color);
   cursor: pointer;
-  border: 1px solid var(--text-color);
+  border: 2px solid var(--text-color);
 }
 .reset-all {
-  border: 1px solid rgb(136, 0, 0);
+  border: 2px solid rgb(136, 0, 0);
   background-color: rgb(36, 0, 0);
 }
 .reset-all:hover {
-  border: 1px solid red;
+  border: 2px solid red;
   background-color: rgb(85, 0, 0);
   cursor: pointer;
 }
