@@ -16,6 +16,7 @@
       src="https://kit.fontawesome.com/b5a5784c82.js"
       crossorigin="anonymous"
     ></script>
+    <script type="module" src="script.js"></script>
     <title>737-800 checklist</title>
   </head>
   <body>
@@ -49,9 +50,26 @@
             <span id="completed-checks" class="">0/7 completed</span>
           </div>
         </div>
-        <div class="checklist-container"></div>
+      </div>
+      <div class="checklist-container">
+        <div class="check completed">
+          <div class="square square-completed">
+            <i class="fa-solid fa-check"></i>
+          </div>
+          <span class="item">OXYGEN</span>
+          <span class="slc">SLC</span>
+          <hr class="divider" />
+          <span class="value">TESTED, 100%</span>
+        </div>
+        <div class="check">
+          <div class="square">
+            <i class="fa-solid fa-check invis"></i>
+          </div>
+          <span class="item">OXYGEN</span>
+          <hr class="divider" />
+          <span class="value">TESTED, 100%</span>
+        </div>
       </div>
     </main>
   </body>
-  <script src="script.js"></script>
 </html>
