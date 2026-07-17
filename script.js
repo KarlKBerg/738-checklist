@@ -120,7 +120,7 @@ function completeCheck() {
       const clickedName = event.currentTarget.querySelector(".item").innerHTML;
 
       const correctCheck = checklist.filter(
-        (check) => check.item === clickedName,
+        (check) => check.item === clickedName && check.stage === currentStage,
       );
       correctCheck[0].completed = !correctCheck[0].completed;
       displayChecklist(currentStage);
