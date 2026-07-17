@@ -130,6 +130,7 @@ function displaySidebarStages() {
         event.currentTarget.querySelector(".stage-name").textContent;
       currentStage = selectedStageName.toLowerCase().replace(" ", "-");
       displayChecklist(currentStage);
+      updateText();
     });
   });
 }
@@ -156,9 +157,15 @@ function resetAll() {
   currentStage = stages[0];
   displayChecklist(currentStage);
   displaySidebarStages();
+  updateText();
 }
 
 function updateText() {
+  const phaseNameBig = document.getElementById("phase-name-big");
   const phaseName = document.getElementById("phase-info-name");
   const phaseNumber = document.getElementById("phase-number-info");
+
+  phaseName.textContent = currentStage.toUpperCase();
+  phaseNameBig.textContent =
+    currentStage.toUpperCase().slice(0, 1) + currentStage.slice(1);
 }
