@@ -27,9 +27,8 @@ aside .header {
   font-weight: 500;
 }
 .header {
-  margin: 2.4rem 1.8rem;
+  padding: 2.4rem 1.8rem;
   border-bottom: 1px solid var(--border-color);
-  height: 10rem;
 }
 aside {
   width: 30rem;
