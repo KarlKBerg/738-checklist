@@ -261,13 +261,6 @@ export let checklist = [
   },
   {
     completed: false,
-    item: "LANDING LIGHTS",
-    value: "ON",
-    slc: true,
-    stage: "before-takeoff",
-  },
-  {
-    completed: false,
     item: "STROBES",
     value: "ON",
     slc: true,
@@ -277,6 +270,13 @@ export let checklist = [
     completed: false,
     item: "TRANSPONDER",
     value: "TA/RA",
+    slc: true,
+    stage: "before-takeoff",
+  },
+  {
+    completed: false,
+    item: "LANDING LIGHTS",
+    value: "ON",
     slc: true,
     stage: "before-takeoff",
   },
@@ -380,6 +380,13 @@ export let checklist = [
   },
   {
     completed: false,
+    item: "ILS/COURSE",
+    value: "SET",
+    slc: false,
+    stage: "descent",
+  },
+  {
+    completed: false,
     item: "APPROACH BRIEFING",
     value: "COMPLETED",
     slc: false,
@@ -397,6 +404,13 @@ export let checklist = [
     item: "PREPARE CABIN FOR LANDING PA",
     value: "GIVEN",
     slc: true,
+    stage: "descent",
+  },
+  {
+    completed: false,
+    item: "LANDING LIGHTS",
+    value: "ON BELOW 10,000FT",
+    slc: false,
     stage: "descent",
   },
   {
