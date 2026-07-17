@@ -68,6 +68,7 @@ main .header {
   flex-direction: column;
   align-items: center;
   gap: 1.6rem;
+  margin-top: 4rem;
 }
 .next-btn {
   align-self: center;
