@@ -15,7 +15,7 @@ const stages = [
   "securing-aircraft",
 ];
 
-let currentStage = "preflight";
+let currentStage = stages[0];
 function displayChecklist(stage) {
   const container = document.querySelector(".checklist-container");
   if (!container) return;
@@ -128,9 +128,14 @@ function displaySidebarStages() {
       // Set currentStage to the same value as clicked element
       const selectedStageName =
         event.currentTarget.querySelector(".stage-name").textContent;
-      currentStage = selectedStageName.toLowerCase().replace(" ", "-");
+      const target = stages.find(
+        (stage) => stage === selectedStageName.toLowerCase().replace(" ", "-"),
+      );
+
+      const targetIndex = stages.indexOf(target);
+      currentStage = stages[targetIndex];
       displayChecklist(currentStage);
-      updateText();
+      updateText(targetIndex);
     });
   });
 }
@@ -160,7 +165,7 @@ function resetAll() {
   updateText();
 }
 
-function updateText() {
+function updateText(index) {
   const phaseNameBig = document.getElementById("phase-name-big");
   const phaseName = document.getElementById("phase-info-name");
   const phaseNumber = document.getElementById("phase-number-info");
@@ -168,4 +173,10 @@ function updateText() {
   phaseName.textContent = currentStage.toUpperCase();
   phaseNameBig.textContent =
     currentStage.toUpperCase().slice(0, 1) + currentStage.slice(1);
+
+  let first = "0";
+  if (index >= 9) {
+    first = "";
+  }
+  phaseNumber.textContent = "PHASE " + first + (index + 1);
 }
