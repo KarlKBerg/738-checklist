@@ -310,6 +310,13 @@ export let checklist = [
   },
   {
     completed: false,
+    item: "ENGINE START SWITCHES",
+    value: "AUTO",
+    slc: false,
+    stage: "after-takeoff",
+  },
+  {
+    completed: false,
     item: "CABIN CREW",
     value: "RELEASED",
     slc: true,
@@ -320,7 +327,14 @@ export let checklist = [
     item: "ALTIMITERS",
     value: "SET AND CROSS CHECKED",
     slc: false,
-    stage: "cruise",
+    stage: "after-takeoff",
+  },
+  {
+    completed: false,
+    item: "LANDING LIGHTS",
+    value: "OFF ABOVE 10,000FT",
+    slc: false,
+    stage: "after-takeoff",
   },
   {
     completed: false,
